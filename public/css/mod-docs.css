@@ -1,0 +1,577 @@
+/* 이 파일이 하는 일: [docs] 모듈 화면에만 쓰는 추가 디자인. 공통 규칙은 app.css 를 따르고, 색은 app.css 의 변수(--accent 등)만 씁니다. */
+/*   docs-  : AI 문서 작성·문서함 (#/documents)
+     mins-  : 회의록 (#/minutes)
+     forms- : 서식 보관함 (#/forms)                                                              */
+
+/* ---------- 문서함: 빠른 시작(문서 종류 고르기) ---------- */
+.docs-kinds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.docs-kind {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.docs-kind:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.docs-kind-name {
+  font-weight: 650;
+  font-size: 13.5px;
+}
+.docs-kind-desc {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+.docs-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+/* 목록 한 줄 (링크 + 오른쪽 … 메뉴). 메뉴를 눌러도 이동하지 않게 링크와 메뉴를 나눔 */
+.docs-row {
+  padding: 0 12px 0 0;
+  gap: 4px;
+}
+.docs-row:hover {
+  background: var(--surface-2);
+}
+.docs-row-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 11px 6px 11px 18px;
+  color: inherit;
+}
+button.docs-row-link {
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.docs-row-link:hover {
+  text-decoration: none;
+}
+.docs-excerpt {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.docs-tag {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
+/* ---------- 문서 작성 화면 (왼쪽 AI·설정, 오른쪽 편집기) ---------- */
+.docs-workspace {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.docs-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+/* 회의록 작성 화면은 왼쪽(메모·AI) 칸을 조금 넓게 */
+.docs-workspace.mins-workspace {
+  grid-template-columns: 420px minmax(0, 1fr);
+}
+/* 회의록 목록: 왼쪽 목록 + 오른쪽 남은 할 일 */
+.mins-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 16px;
+  align-items: start;
+}
+.docs-title-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 4px 0;
+  outline: none;
+  color: var(--text);
+}
+.docs-title-input::placeholder {
+  color: var(--text-3);
+  font-weight: 600;
+}
+.docs-title-input:focus-visible {
+  box-shadow: none;
+}
+.docs-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.docs-toolbar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--purple);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 2px;
+}
+.docs-editor {
+  display: block;
+  width: 100%;
+  min-height: 560px;
+  border: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 18px 20px;
+  resize: vertical;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+}
+.docs-editor:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.docs-preview {
+  min-height: 560px;
+  padding: 22px 26px;
+}
+.docs-head {
+  padding: 14px 20px 10px;
+}
+.docs-revise-box {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.docs-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.docs-dirty {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--warning);
+}
+.docs-kb-box {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--purple-soft);
+}
+.docs-kb-box .check span {
+  font-weight: 600;
+}
+
+/* ---------- 인쇄 화면 ---------- */
+.docs-print-bar {
+  max-width: 794px;
+  margin: 0 auto 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+/* 종이(.paper)는 다크 모드에서도 흰 종이처럼 보이도록 글·표 색을 고정 */
+.paper .prose th,
+.paper .prose td {
+  border-color: #cfd4dc;
+}
+.paper .prose th {
+  background: #f3f4f6;
+  color: #222;
+}
+.paper .prose code {
+  background: #f1f3f6;
+  color: #222;
+}
+.paper .prose blockquote {
+  border-left-color: #bbb;
+  color: #444;
+}
+.paper .prose hr {
+  border-top-color: #ccc;
+}
+.paper .prose h2 {
+  font-size: 1.12em;
+}
+.paper-kv {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.paper-kv th,
+.paper-kv td {
+  border: 1px solid #cfd4dc;
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.paper-kv th {
+  width: 90px;
+  background: #f3f4f6;
+  color: #333;
+  font-weight: 600;
+}
+.paper-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.paper-table th,
+.paper-table td {
+  border: 1px solid #cfd4dc;
+  padding: 6px 9px;
+  text-align: left;
+  vertical-align: top;
+}
+.paper-table th {
+  background: #f3f4f6;
+  color: #333;
+  font-weight: 600;
+}
+.paper-table .center {
+  text-align: center;
+}
+.paper-section {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin: 18px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ddd;
+}
+.paper-sign {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+}
+.paper-sign div {
+  width: 84px;
+  border: 1px solid #999;
+  text-align: center;
+  font-size: 12px;
+}
+.paper-sign div + div {
+  border-left: 0;
+}
+.paper-sign span {
+  display: block;
+  border-bottom: 1px solid #999;
+  padding: 3px 0;
+  background: #f3f4f6;
+}
+.paper-sign i {
+  display: block;
+  height: 46px;
+}
+@media print {
+  .paper-sign span,
+  .paper-table th,
+  .paper-kv th {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ---------- 회의록 ---------- */
+.mins-date {
+  width: 46px;
+  flex: none;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  text-align: center;
+  overflow: hidden;
+  line-height: 1.15;
+}
+.mins-date-m {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  padding: 2px 0;
+}
+.mins-date-d {
+  display: block;
+  font-size: 17px;
+  font-weight: 750;
+  padding: 3px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.mins-progress {
+  width: 120px;
+  flex: none;
+}
+.mins-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mins-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.mins-chip:hover {
+  background: var(--surface-hover);
+}
+.mins-chip[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--accent-text);
+}
+.mins-chip .dot {
+  width: 7px;
+  height: 7px;
+}
+.mins-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.mins-action:last-child {
+  border-bottom: 0;
+}
+.mins-action-check {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.12s, border-color 0.12s;
+}
+.mins-action-check:hover {
+  border-color: var(--success);
+}
+.mins-action-check[aria-pressed='true'] {
+  background: var(--success);
+  border-color: var(--success);
+}
+.mins-action.done .mins-action-task {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+.mins-action-task {
+  font-weight: 550;
+}
+.mins-edit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px 150px 34px;
+  gap: 8px;
+  align-items: center;
+}
+.mins-summary {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+/* ---------- 서식 보관함 ---------- */
+.forms-drop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 16px;
+  width: 100%;
+  text-align: left;
+  color: inherit;
+}
+.forms-drop:hover,
+.forms-drop.over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.forms-drop .icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+.forms-drop-title {
+  font-weight: 650;
+  font-size: 14.5px;
+}
+.forms-tile {
+  width: 38px;
+  height: 44px;
+  flex: none;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: var(--surface-hover);
+  color: var(--text-2);
+  position: relative;
+}
+.forms-tile-ext {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.forms-tile.blue {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+.forms-tile.green {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.forms-tile.amber {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.forms-tile.red {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.forms-tile.purple {
+  background: var(--purple-soft);
+  color: var(--purple);
+}
+.forms-row-actions {
+  display: flex;
+  gap: 4px;
+  flex: none;
+  align-items: center;
+}
+.forms-size {
+  width: 70px;
+  text-align: right;
+  flex: none;
+}
+.forms-upload-item {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 130px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.forms-upload-item:last-child {
+  border-bottom: 0;
+}
+.forms-upload-item .forms-desc {
+  grid-column: 2 / -1;
+}
+.forms-preview-text {
+  max-height: 60vh;
+  overflow: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+}
+.forms-preview-img {
+  display: block;
+  max-width: 100%;
+  max-height: 65vh;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: repeating-conic-gradient(var(--surface-hover) 0 25%, var(--surface) 0 50%) 0 0 / 16px 16px;
+}
+
+/* ---------- 태블릿·좁은 화면 ---------- */
+@media (max-width: 1000px) {
+  .docs-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs-workspace.mins-workspace,
+  .mins-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .docs-editor,
+  .docs-preview {
+    min-height: 420px;
+  }
+}
+@media (max-width: 700px) {
+  .mins-edit-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 34px;
+  }
+  .mins-edit-row > :first-child {
+    grid-column: 1 / -1;
+  }
+  .mins-progress,
+  .forms-size {
+    display: none;
+  }
+  .forms-upload-item {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+  .forms-upload-item > select {
+    grid-column: 2;
+  }
+}

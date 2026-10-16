@@ -1,0 +1,870 @@
+/* 이 파일이 하는 일: [facility] 모듈 화면(장비·점검, 멸균기 기록, 법정 일정, 지출·월별 요약)에만 쓰는 추가 디자인. 공통 규칙은 app.css 를 따르고, 색은 app.css 의 변수(--accent 등)만 씁니다. */
+
+/* ---------- 간격 도우미 ---------- */
+.fx-mb {
+  margin-bottom: 16px;
+}
+.fx-filters {
+  margin-bottom: 12px;
+  gap: 10px;
+}
+.table tr.fx-dim td {
+  opacity: 0.6;
+}
+
+/* ---------- 큰 선택 버튼 (태블릿에서 누르기 쉽게 44px) ---------- */
+.fx-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fx-choice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 64px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+.fx-choice:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.fx-choice[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.fx-choice.tone-pass[aria-checked='true'] {
+  border-color: var(--success);
+  background: var(--success-soft);
+  color: var(--success);
+  box-shadow: inset 0 0 0 1px var(--success);
+}
+.fx-choice.tone-fail[aria-checked='true'] {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+  box-shadow: none;
+}
+.fx-choice.tone-pending[aria-checked='true'] {
+  border-color: var(--warning);
+  background: var(--warning-soft);
+  color: var(--warning);
+  box-shadow: inset 0 0 0 1px var(--warning);
+}
+.fx-choices.sm .fx-choice {
+  min-height: 34px;
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+}
+.fx-choice-big {
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 150px;
+  min-height: 56px;
+  padding: 8px 14px;
+  text-align: left;
+  gap: 0;
+}
+.fx-choice-big small {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.fx-choice-big[aria-checked='true'] small {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* 작은 바로 넣기 버튼 */
+.fx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.fx-chip:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.fx-chip[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* 숫자 올리고 내리기 (회차) */
+.fx-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+.fx-stepper button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.fx-stepper button:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.fx-stepper input {
+  width: 56px;
+  height: 44px;
+  border: 0;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.fx-stepper input:focus {
+  outline: none;
+  box-shadow: inset var(--focus);
+}
+
+/* 측정값 입력칸 (단위가 붙은 큰 입력칸) */
+.fx-measure {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.fx-unit-input {
+  position: relative;
+}
+.fx-unit-input .input {
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  padding-right: 44px;
+  font-variant-numeric: tabular-nums;
+}
+.fx-unit-input span {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  font-size: 12.5px;
+  pointer-events: none;
+}
+
+/* ---------- 멸균기 기록 화면 배치 ---------- */
+.fx-ster-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.fx-form-section + .fx-form-section {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.fx-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fx-section-title {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fx-indicator-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+.fx-indicator-row .fx-ind-label {
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.25;
+}
+.fx-indicator-row .fx-ind-label small {
+  display: block;
+  font-weight: 500;
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.fx-save-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fx-save-bar .btn {
+  height: 48px;
+  font-size: 15px;
+  padding: 0 22px;
+}
+.fx-log-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.fx-log-row:last-child {
+  border-bottom: 0;
+}
+.fx-log-row.is-fail {
+  background: color-mix(in srgb, var(--danger-soft) 70%, transparent);
+}
+.fx-cycle {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--surface-hover);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+.fx-cycle b {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+.fx-cycle small {
+  font-size: 10.5px;
+  color: var(--text-3);
+}
+.fx-log-row.is-fail .fx-cycle {
+  background: var(--danger);
+  color: #fff;
+}
+.fx-log-row.is-fail .fx-cycle small {
+  color: rgba(255, 255, 255, 0.85);
+}
+.fx-values {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  font-size: 13px;
+}
+.fx-actions-list {
+  margin: 6px 0 0;
+  padding-left: 1.2em;
+}
+.fx-actions-list li + li {
+  margin-top: 2px;
+}
+
+/* ---------- 키-값 목록 (장비 정보) ---------- */
+.fx-kv {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 8px 12px;
+  margin: 0;
+  font-size: 13.5px;
+}
+.fx-kv dt {
+  color: var(--text-3);
+}
+.fx-kv dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- 이력 타임라인 ---------- */
+.fx-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+}
+.fx-tl-item {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding: 12px 18px 12px 18px;
+}
+.fx-tl-item::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.fx-tl-item:first-child::before {
+  top: 20px;
+}
+.fx-tl-item:last-child::before {
+  bottom: calc(100% - 20px);
+}
+.fx-tl-dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--text-3);
+}
+.fx-tl-item.tone-blue .fx-tl-dot {
+  border-color: var(--accent);
+}
+.fx-tl-item.tone-purple .fx-tl-dot {
+  border-color: var(--purple);
+}
+.fx-tl-item.tone-red .fx-tl-dot {
+  border-color: var(--danger);
+}
+.fx-tl-item.tone-amber .fx-tl-dot {
+  border-color: var(--warning);
+}
+
+/* ---------- 월 선택 ---------- */
+.fx-month {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.fx-month-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 650;
+  font-size: 14px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.fx-month-label:hover {
+  background: var(--surface-hover);
+}
+.fx-month-label .icon {
+  color: var(--text-3);
+}
+.fx-month-input {
+  position: absolute;
+  left: 40px;
+  top: 100%;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+  padding: 0;
+}
+
+/* ---------- 법정 일정 ---------- */
+.fx-task-due {
+  text-align: right;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 96px;
+}
+.fx-task-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+.fx-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.list-item.fx-overdue {
+  box-shadow: inset 3px 0 0 var(--danger);
+}
+.list-item.fx-soon {
+  box-shadow: inset 3px 0 0 var(--warning);
+}
+.fx-cycle-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ---------- 지출: 색 표시 ---------- */
+.fx-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+  background: var(--text-3);
+}
+.fx-swatch.lg {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+}
+.fx-cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.fx-amount {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fx-amount.neg {
+  color: var(--success);
+}
+.fx-big-amount {
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 분류 고르기 (색 점이 있는 버튼 묶음) */
+.fx-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 6px;
+}
+.fx-cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-2);
+  font-weight: 550;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+.fx-cat-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.fx-cat-btn[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* 색 고르기 */
+.fx-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.fx-color {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+.fx-color[aria-pressed='true'] {
+  border-color: var(--text);
+}
+.fx-color-input {
+  width: 40px;
+  height: 30px;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+/* ---------- 지출 차트 ---------- */
+.fx-share-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface-active);
+  gap: 2px;
+}
+.fx-share-bar > span {
+  display: block;
+  height: 100%;
+  min-width: 3px;
+}
+.fx-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.fx-bars li {
+  display: grid;
+  grid-template-columns: minmax(96px, 128px) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.fx-bars .fx-bar-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fx-bar-track {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--surface-hover);
+  overflow: hidden;
+}
+.fx-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  min-width: 2px;
+  transition: width 0.4s var(--ease);
+}
+.fx-bar-val {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 108px;
+}
+.fx-bar-val small {
+  color: var(--text-3);
+  margin-left: 6px;
+  display: inline-block;
+  min-width: 40px;
+}
+
+.fx-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.fx-chart .fx-grid-line {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.fx-chart .fx-axis {
+  fill: var(--text-3);
+  font-size: 12.5px;
+  font-family: var(--font);
+}
+.fx-chart .fx-axis.is-current {
+  fill: var(--text);
+  font-weight: 700;
+}
+.fx-chart .fx-col {
+  fill: color-mix(in srgb, var(--accent) 38%, var(--surface));
+  cursor: pointer;
+  transition: fill 0.12s;
+}
+.fx-chart .fx-col:hover {
+  fill: color-mix(in srgb, var(--accent) 65%, var(--surface));
+}
+.fx-chart .fx-col.is-current {
+  fill: var(--accent);
+}
+.fx-chart .fx-col.is-partial {
+  fill: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+.fx-chart .fx-col.is-current.is-partial {
+  fill: color-mix(in srgb, var(--accent) 55%, var(--surface));
+}
+.fx-chart .fx-avg {
+  stroke: var(--text-3);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+}
+.fx-chart .fx-avg-label {
+  fill: var(--text-3);
+  font-size: 12px;
+  font-family: var(--font);
+}
+.fx-chart .fx-val {
+  fill: var(--text-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--font);
+}
+.fx-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 8px;
+}
+.fx-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.fx-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+.fx-legend i.soft {
+  background: color-mix(in srgb, var(--accent) 38%, var(--surface));
+}
+.fx-legend i.line {
+  height: 0;
+  border-top: 1.5px dashed var(--text-3);
+  border-radius: 0;
+  background: none;
+  width: 14px;
+}
+.fx-rank {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.fx-rank li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.fx-rank li:last-child {
+  border-bottom: 0;
+}
+.fx-rank .fx-rank-no {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--surface-hover);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.fx-change-up {
+  color: var(--danger);
+}
+.fx-change-down {
+  color: var(--success);
+}
+
+/* 가져오기 미리보기 표 */
+.fx-import-table td {
+  vertical-align: middle;
+}
+.fx-import-table tr.is-off td {
+  opacity: 0.5;
+}
+.fx-import-table tr.is-error td {
+  background: color-mix(in srgb, var(--danger-soft) 60%, transparent);
+}
+.fx-import-table .select {
+  min-width: 132px;
+}
+.fx-dropzone {
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface-2);
+  flex-wrap: wrap;
+}
+.fx-dropzone.is-over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.fx-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ---------- 인쇄용 멸균 기록부 ---------- */
+.fx-print-table {
+  font-size: 10.5px;
+}
+.fx-print-table th,
+.fx-print-table td {
+  padding: 4px 5px;
+  white-space: nowrap;
+}
+.fx-print-table td.fx-wrap {
+  white-space: normal;
+  min-width: 90px;
+}
+.fx-print-table td.fx-sign {
+  width: 54px;
+}
+.fx-sign-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  margin-top: 22px;
+  font-size: 12px;
+}
+.fx-sign-row div {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.fx-sign-row span.line {
+  display: inline-block;
+  width: 110px;
+  border-bottom: 1px solid #555;
+  height: 22px;
+}
+.fx-print-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  color: #333;
+}
+@media print {
+  .fx-print-table {
+    font-size: 8.5pt;
+  }
+  .fx-print-table th,
+  .fx-print-table td {
+    padding: 3px 4px !important;
+  }
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 1100px) {
+  .fx-ster-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .fx-measure {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fx-indicator-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .fx-bars li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .fx-bars .fx-bar-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .fx-task-due {
+    min-width: 0;
+  }
+}
+
+/* 월별 표에서 불합격 줄 강조 */
+.table tr.fx-fail-row td {
+  background: color-mix(in srgb, var(--danger-soft) 70%, transparent);
+}
+.fx-choice.tone-none[aria-checked='true'] {
+  border-color: var(--border-strong);
+  background: var(--surface-active);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.fx-row-click {
+  cursor: pointer;
+}
+.fx-row-click:hover {
+  background: var(--surface-2);
+}
+.fx-title-link {
+  color: var(--text);
+}
+.fx-title-link:hover {
+  color: var(--accent-text);
+}
+.list-item.fx-dim-item > *:not(.menu-wrap):not(.btn) {
+  opacity: 0.6;
+}
+
+/* 숫자 카드 4개 줄: 넓은 화면 4칸 → 태블릿 2칸 → 휴대폰 1칸 */
+.fx-stat-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px) {
+  .fx-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .fx-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

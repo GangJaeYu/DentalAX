@@ -1,0 +1,7 @@
+# 이 파일이 하는 일: git이 파일 줄바꿈·형식을 다루는 규칙 (윈도우 배치 파일이 받는 PC에서도 정상 실행되도록)
+* text=auto
+*.bat text eol=crlf
+*.woff2 binary
+*.webm binary
+*.png binary
+*.jpg binary

@@ -1,0 +1,1035 @@
+/* 이 파일이 하는 일: [desk] 모듈 화면에만 쓰는 추가 디자인. 공통 규칙은 app.css 를 따르고, 색은 app.css 의 변수(--accent 등)만 씁니다.
+ *   ck-… : 오픈·마감 체크리스트 화면 (pages/checklists.js)
+ *   cm-… : 소통 도우미 화면 (pages/comms.js)
+ */
+
+/* =====================================================================
+ * 체크리스트 — 오늘 체크
+ * ===================================================================== */
+.ck-datebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.ck-date-nav {
+  gap: 6px;
+  flex-wrap: wrap;
+}
+/* 날짜 글자를 누르면 달력이 열림 (진짜 date 입력칸을 투명하게 위에 겹침) */
+.ck-date-pick {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.ck-date-pick:hover {
+  background: var(--surface-hover);
+}
+.ck-date-pick:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+}
+.ck-date-pick .icon {
+  color: var(--text-3);
+}
+.ck-date-pick input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  cursor: pointer;
+  border: 0;
+}
+.ck-date-pick input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.ck-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-2);
+  padding: 6px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.ck-summary.all {
+  color: var(--success);
+  background: var(--success-soft);
+  border-color: color-mix(in srgb, var(--success) 25%, transparent);
+}
+.ck-callout {
+  margin-bottom: 14px;
+}
+.ck-na {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.ck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.ck-card {
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.ck-card.complete {
+  border-color: color-mix(in srgb, var(--success) 35%, var(--border));
+}
+.ck-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px 10px;
+}
+.ck-card-head .icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+}
+.ck-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.ck-count {
+  font-size: 14px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.ck-count strong {
+  font-size: 22px;
+  font-weight: 750;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.ck-card.complete .ck-count strong {
+  color: var(--success);
+}
+.ck-progress {
+  padding: 0 18px 12px;
+}
+.ck-stamp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 18px 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 13.5px;
+  border: 1px dashed color-mix(in srgb, var(--success) 45%, transparent);
+}
+.ck-stamp strong {
+  font-weight: 700;
+}
+.ck-left {
+  margin: -4px 18px 10px;
+  color: var(--warning);
+  font-weight: 600;
+}
+.ck-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+.ck-row {
+  border-bottom: 1px solid var(--border);
+}
+.ck-row:last-child {
+  border-bottom: 0;
+}
+.ck-row-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 10px;
+}
+/* 줄 전체가 체크 버튼 — 태블릿에서 누르기 쉽게 높이 52px 이상 */
+.ck-toggle {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 10px 8px 10px 18px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  border-radius: 0;
+}
+.ck-toggle:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+.ck-toggle:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent);
+  border-radius: 0;
+}
+.ck-toggle:disabled {
+  cursor: default;
+}
+.ck-box {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 2px solid var(--border-strong);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+}
+.ck-box .spinner {
+  width: 12px;
+  height: 12px;
+  color: var(--text-3);
+}
+.ck-toggle:hover:not(:disabled) .ck-box {
+  border-color: var(--accent);
+}
+.ck-toggle:active:not(:disabled) .ck-box {
+  transform: scale(0.92);
+}
+.ck-row.done .ck-box {
+  background: var(--success);
+  border-color: var(--success);
+}
+.ck-row.done .ck-box .spinner {
+  color: #fff;
+}
+.ck-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.ck-label {
+  font-size: 14.5px;
+  font-weight: 550;
+  line-height: 1.45;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ck-row.done .ck-label {
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--text-3) 60%, transparent);
+}
+.ck-row.done .ck-label .badge {
+  text-decoration: none;
+}
+.ck-hint {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-3);
+  line-height: 1.45;
+  font-weight: 400;
+}
+.ck-opt {
+  height: 18px;
+  font-size: 11px;
+  padding: 0 5px;
+}
+.ck-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+.ck-who {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.ck-who-name {
+  color: var(--text-2);
+  font-weight: 600;
+}
+.ck-note-btn {
+  color: var(--text-3);
+  opacity: 0.55;
+}
+.ck-row:hover .ck-note-btn,
+.ck-note-btn:focus-visible,
+.ck-note-btn.has-note {
+  opacity: 1;
+}
+.ck-note-btn.has-note {
+  color: var(--warning);
+}
+.ck-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -4px 18px 10px 54px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-soft);
+  color: var(--text);
+  font-size: 12.5px;
+  width: fit-content;
+  max-width: calc(100% - 72px);
+}
+.ck-note .icon {
+  color: var(--warning);
+  flex: none;
+}
+.ck-note-edit {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0 14px 12px 54px;
+}
+.ck-card-foot {
+  padding: 10px 18px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}
+@media (max-width: 900px) {
+  .ck-note-btn {
+    opacity: 1;
+  }
+}
+
+/* =====================================================================
+ * 체크리스트 — 기록 (최근 30일)
+ * ===================================================================== */
+.ck-stats {
+  margin-bottom: 16px;
+}
+.ck-heat {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 12.5px;
+}
+.ck-heat th,
+.ck-heat td {
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+}
+.ck-heat thead th {
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-weight: 600;
+  height: 44px;
+}
+.ck-heat tbody tr:last-child th,
+.ck-heat tbody tr:last-child td {
+  border-bottom: 0;
+}
+.ck-heat-name {
+  text-align: left;
+  padding: 10px 14px 10px 18px !important;
+  min-width: 150px;
+  max-width: 190px;
+  font-weight: 400;
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.ck-heat thead .ck-heat-name {
+  background: var(--surface-2);
+}
+.ck-heat-day {
+  min-width: 24px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+.ck-heat-day span {
+  display: block;
+}
+.ck-heat-day .ck-wd {
+  font-size: 10px;
+  font-weight: 500;
+}
+.ck-heat-day.sun {
+  color: var(--danger);
+}
+.ck-heat-day.sat {
+  color: var(--accent-text);
+}
+.ck-heat-day.is-today {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.ck-heat-cell {
+  text-align: center;
+  height: 52px;
+}
+.ck-heat-rate {
+  text-align: right;
+  padding: 0 18px 0 12px !important;
+  white-space: nowrap;
+  min-width: 70px;
+  font-size: 13.5px;
+}
+/* 날짜 칸: 완료(초록) / 덜 끝남(주황, 진행 비율만큼 채움) / 기록 없음(빨강) / 해당 없음(점선) */
+.ck-cell {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 0;
+  padding: 0;
+  vertical-align: middle;
+  background: var(--surface-active);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+button.ck-cell:hover {
+  transform: scale(1.18);
+}
+.ck-cell.complete {
+  background: var(--success);
+}
+.ck-cell.partial,
+.ck-cell.today-partial {
+  background: linear-gradient(to top, var(--warning) var(--fill, 50%), var(--warning-soft) var(--fill, 50%));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warning) 45%, transparent);
+}
+.ck-cell.missed {
+  background: var(--danger-soft);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--danger) 55%, transparent);
+}
+.ck-cell.today {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.ck-cell.na {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--border);
+  cursor: default;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.ck-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 11px 18px;
+  border-top: 1px solid var(--border);
+}
+.ck-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ck-legend .ck-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  cursor: default;
+}
+.ck-legend .ck-cell.na {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+/* =====================================================================
+ * 체크리스트 — 템플릿 관리
+ * ===================================================================== */
+.ck-tpl-bar {
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.ck-tpl-bar p {
+  max-width: 640px;
+}
+.ck-tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.ck-tpl.inactive {
+  opacity: 0.72;
+}
+.ck-items {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+.ck-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 18px;
+  min-height: 46px;
+}
+.ck-item:hover {
+  background: var(--surface-2);
+}
+.ck-item.editing {
+  background: var(--surface-2);
+  padding: 10px 14px 12px 18px;
+}
+.ck-item-no {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--surface-hover);
+  color: var(--text-3);
+  font-size: 11.5px;
+  font-weight: 650;
+  display: grid;
+  place-items: center;
+}
+.ck-item-text {
+  font-weight: 550;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ck-item-actions {
+  display: flex;
+  gap: 0;
+  flex: none;
+  opacity: 0.35;
+  transition: opacity 0.12s;
+}
+.ck-item:hover .ck-item-actions,
+.ck-item:focus-within .ck-item-actions {
+  opacity: 1;
+}
+@media (max-width: 900px) {
+  .ck-item-actions {
+    opacity: 1;
+  }
+}
+.ck-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.ck-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 20px;
+  border-top: 1px solid var(--border);
+  min-height: 50px;
+}
+.ck-add:focus-within {
+  background: var(--surface-2);
+}
+.ck-add-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  height: 34px;
+  outline: none;
+  font-size: 14px;
+}
+.ck-add-input::placeholder {
+  color: var(--text-3);
+}
+
+/* 요일 고르기 */
+.ck-days {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ck-days button {
+  width: 40px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.ck-days button:hover {
+  background: var(--surface-hover);
+}
+.ck-days button.sun {
+  color: var(--danger);
+}
+.ck-days button.sat {
+  color: var(--accent-text);
+}
+.ck-days button[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* AI 추천 목록 */
+.ck-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ck-suggest-head {
+  flex-wrap: wrap;
+}
+.ck-suggest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.ck-suggest-list li + li {
+  border-top: 1px solid var(--border);
+}
+.ck-suggest-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.ck-suggest-item:hover {
+  background: var(--surface-2);
+}
+.ck-suggest-item.on {
+  background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+}
+.ck-suggest-item input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+/* =====================================================================
+ * 소통 도우미 — 공통
+ * ===================================================================== */
+.cm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.cm-search {
+  max-width: 320px;
+  flex: 1 1 220px;
+}
+/* 분류 칩: 가로로 나열, 좁으면 줄바꿈 */
+.cm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.cm-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.cm-chips button:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.cm-chips button .num {
+  color: var(--text-3);
+  font-size: 12px;
+}
+.cm-chips button[aria-pressed='true'] {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--surface);
+}
+.cm-chips button[aria-pressed='true'] .num {
+  color: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.modal .cm-chips {
+  margin-bottom: 0;
+}
+
+/* 목록 | 상세 두 칸 */
+.cm-split {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.cm-list-card {
+  position: sticky;
+  top: calc(var(--topbar-h) + 16px);
+  max-height: calc(100vh - var(--topbar-h) - 32px);
+  overflow: auto;
+}
+.cm-item {
+  position: relative;
+}
+.cm-item.active {
+  background: var(--accent-soft) !important;
+}
+.cm-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+.cm-item.active .list-title {
+  color: var(--accent-text);
+}
+@media (max-width: 1000px) {
+  .cm-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cm-list-card {
+    position: static;
+    max-height: 340px;
+  }
+}
+
+/* 스크립트 본문: 통화 중 읽기 좋게 조금 크게 */
+.cm-script .prose {
+  font-size: 15px;
+  line-height: 1.85;
+}
+.cm-script .prose h2,
+.cm-script .prose h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-text);
+  letter-spacing: 0.01em;
+  margin-top: 1.4em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.cm-script .prose h2:first-child,
+.cm-script .prose h3:first-child {
+  margin-top: 0;
+}
+.cm-mono {
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+.cm-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.cm-facts-list {
+  gap: 5px;
+}
+.cm-purple {
+  color: var(--purple);
+}
+
+/* =====================================================================
+ * 소통 도우미 — 리뷰 답글
+ * ===================================================================== */
+.cm-review {
+  display: grid;
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .cm-review {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.cm-rules {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.cm-stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.cm-stars button {
+  border: 0;
+  background: none;
+  padding: 3px;
+  cursor: pointer;
+  color: var(--border-strong);
+  border-radius: 6px;
+  line-height: 0;
+  transition: transform 0.1s, color 0.1s;
+}
+.cm-stars button:hover {
+  transform: scale(1.12);
+}
+.cm-stars button.on {
+  color: #f5a524;
+}
+.cm-stars button.on svg {
+  fill: currentColor;
+}
+.cm-stars-label {
+  margin-left: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.cm-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cm-results-head {
+  gap: 8px;
+}
+.cm-draft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.cm-draft.manual {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: none;
+}
+.cm-draft-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cm-draft-head > .icon {
+  color: var(--purple);
+}
+.cm-draft.manual .cm-draft-head > .icon {
+  color: var(--accent-text);
+}
+.cm-reply-text {
+  font-size: 14.5px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.cm-mark {
+  border-radius: 4px;
+  padding: 0 2px;
+  color: inherit;
+  cursor: help;
+}
+.cm-mark.danger {
+  background: color-mix(in srgb, var(--danger) 22%, transparent);
+  box-shadow: inset 0 -2px 0 var(--danger);
+}
+.cm-mark.warn {
+  background: color-mix(in srgb, var(--warning) 22%, transparent);
+  box-shadow: inset 0 -2px 0 var(--warning);
+}
+.cm-warns {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cm-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+}
+.cm-warn.warn {
+  background: var(--warning-soft);
+}
+.cm-warn .badge {
+  margin-top: 1px;
+}
+.cm-check-ok {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--success);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--success-soft);
+}
+
+/* =====================================================================
+ * 소통 도우미 — 문자·안내문
+ * ===================================================================== */
+.cm-msg {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 1250px) {
+  .cm-msg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.cm-body {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.cm-vars {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: -4px;
+}
+.cm-var-chip {
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 6px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cm-var-chip:hover {
+  border-style: solid;
+}
+.cm-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* 휴대폰 모양 미리보기 */
+.cm-phone {
+  border-radius: 26px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  padding: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.cm-phone-top {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text-2);
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--border);
+  margin: 0 6px;
+}
+.cm-phone-screen {
+  min-height: 220px;
+  max-height: 420px;
+  overflow: auto;
+  padding: 12px 6px 6px;
+}
+.cm-bubble {
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 16px 16px 16px 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.cm-bubble.empty {
+  color: var(--text-3);
+}
+.cm-var-fill {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-radius: 4px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+.cm-var-unknown {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border-radius: 4px;
+  padding: 0 2px;
+}
+.cm-bytes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.cm-bytes strong {
+  font-size: 18px;
+  font-weight: 750;
+}
+.cm-bytes.over strong {
+  color: var(--danger);
+}
+.cm-sample-note {
+  line-height: 1.5;
+}

@@ -1,0 +1,642 @@
+/* 이 파일이 하는 일: [inventory] 모듈 화면(재고·발주서·거래처)에만 쓰는 추가 디자인. 공통 규칙은 app.css 를 따르고, 색은 app.css 의 변수(--accent 등)만 씁니다. */
+
+/* ---------- 재고 수량 + 막대 ---------- */
+.inv-qty {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.inv-qty b {
+  font-weight: 650;
+  font-size: 14px;
+}
+.inv-qty .unit {
+  color: var(--text-3);
+  font-size: 12px;
+}
+.inv-stock {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 96px;
+}
+.inv-bar {
+  position: relative;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--surface-active);
+  overflow: hidden;
+  width: 100%;
+  max-width: 120px;
+}
+.inv-bar > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: var(--success);
+  transition: width 0.3s var(--ease);
+}
+.inv-bar.low > span {
+  background: var(--warning);
+}
+.inv-bar.out > span {
+  background: var(--danger);
+}
+/* 적정 재고 위치 표시선 */
+.inv-bar > i {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--text-3);
+  opacity: 0.55;
+  left: 50%;
+}
+
+/* ---------- 목록 이름 칸 ---------- */
+.inv-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+.inv-name .title {
+  font-weight: 600;
+  color: var(--text);
+}
+.inv-name .sub {
+  font-size: 12px;
+  color: var(--text-3);
+}
+a.inv-link {
+  color: inherit;
+}
+a.inv-link:hover .title {
+  color: var(--accent-text);
+}
+.table tr.inv-row-low td:first-child {
+  box-shadow: inset 3px 0 0 var(--warning);
+}
+.table tr.inv-row-out td:first-child {
+  box-shadow: inset 3px 0 0 var(--danger);
+}
+.inv-quick {
+  display: inline-flex;
+  gap: 4px;
+}
+
+/* ---------- 상단 도구 줄 ---------- */
+.inv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 12px;
+}
+.inv-toolbar .input-group {
+  width: 260px;
+  max-width: 100%;
+}
+.inv-stats {
+  margin-bottom: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 1100px) {
+  .inv-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.inv-stats .stat.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* ---------- 수량 입력 (− 숫자 +) ---------- */
+.qty-stepper {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+  height: 44px;
+}
+.qty-stepper:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+}
+.qty-stepper button {
+  width: 46px;
+  border: 0;
+  background: var(--surface-2);
+  color: var(--text-2);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.qty-stepper button:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.qty-stepper input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.qty-stepper .unit {
+  align-self: center;
+  padding-right: 10px;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+/* 작은 알약 버튼 (빠른 수량·메모 고르기) */
+.inv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.inv-chip {
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 12.5px;
+  font-weight: 550;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.inv-chip:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.inv-chip[aria-pressed='true'] {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent-text);
+}
+
+/* 입출고 창 머리 (품목 이름 · 지금 → 기록 후) */
+.inv-move-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.inv-move-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.inv-move-flow .now {
+  color: var(--text-3);
+}
+.inv-move-flow .next {
+  font-weight: 700;
+  font-size: 16px;
+}
+.inv-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 12.5px;
+}
+.inv-plan-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- 정보 목록 (이름 : 값) ---------- */
+.inv-dl {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 9px 12px;
+  margin: 0;
+  font-size: 13.5px;
+}
+.inv-dl dt {
+  color: var(--text-3);
+  font-size: 12.5px;
+  padding-top: 1px;
+}
+.inv-dl dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- 상세 머리 ---------- */
+.inv-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.inv-hero .icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+.inv-hero h1 {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.inv-back {
+  margin-bottom: 12px;
+}
+
+/* ---------- 단가 추이 작은 그래프 ---------- */
+.spark {
+  display: block;
+  overflow: visible;
+}
+.spark .line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.spark .area {
+  fill: var(--accent-soft);
+  stroke: none;
+}
+.spark .dot {
+  fill: var(--accent);
+}
+.spark.up .line {
+  stroke: var(--danger);
+}
+.spark.up .area {
+  fill: var(--danger-soft);
+}
+.spark.up .dot {
+  fill: var(--danger);
+}
+.spark.down .line {
+  stroke: var(--success);
+}
+.spark.down .area {
+  fill: var(--success-soft);
+}
+.spark.down .dot {
+  fill: var(--success);
+}
+.inv-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.inv-change.up {
+  color: var(--danger);
+}
+.inv-change.down {
+  color: var(--success);
+}
+
+/* ---------- 경고 카드 목록 ---------- */
+.inv-alert-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .inv-alert-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.inv-alert-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.inv-alert-item:last-child {
+  border-bottom: 0;
+}
+
+/* ---------- 거래명세서 짝 맞추기 표 ---------- */
+.inv-map td {
+  vertical-align: top;
+}
+.inv-map .input,
+.inv-map .select {
+  height: 32px;
+  font-size: 13px;
+}
+.inv-map .num-in {
+  width: 84px;
+}
+.inv-map .price-in {
+  width: 104px;
+}
+.inv-map tr.skip td {
+  opacity: 0.5;
+}
+.inv-file {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px 16px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-2);
+}
+.inv-file:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.inv-file input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* ---------- 발주서 진행 단계 ---------- */
+.po-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 2px 0 0;
+  flex-wrap: wrap;
+}
+.po-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.po-step .num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface-active);
+  color: var(--text-3);
+  font-size: 11.5px;
+}
+.po-step.done .num {
+  background: var(--success);
+  color: #fff;
+}
+.po-step.done {
+  color: var(--text-2);
+}
+.po-step.current .num {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.po-step.current {
+  color: var(--text);
+}
+.po-step-line {
+  width: 36px;
+  height: 2px;
+  background: var(--border-strong);
+  margin: 0 8px;
+  border-radius: 2px;
+}
+.po-step-line.done {
+  background: var(--success);
+}
+.po-total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 14px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.po-total b {
+  font-size: 18px;
+  font-weight: 700;
+}
+.po-lines .input,
+.po-lines .select {
+  height: 32px;
+  font-size: 13px;
+}
+.po-lines .num-in {
+  width: 86px;
+}
+.po-lines .price-in {
+  width: 110px;
+}
+.po-group + .po-group {
+  margin-top: 14px;
+}
+
+/* ---------- 인쇄용 발주서 ---------- */
+.po-print-bar {
+  max-width: 794px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.po-paper-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.po-paper-parties .box {
+  border: 1px solid #cfd4dc;
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+.po-paper-parties .box h3 {
+  font-size: 12px;
+  color: #555;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+.po-paper-parties .box .who {
+  font-size: 15px;
+  font-weight: 700;
+}
+.po-paper-parties .box div {
+  font-size: 12.5px;
+}
+.paper .po-paper-table {
+  font-size: 12.5px;
+}
+.paper .po-paper-table tfoot td {
+  font-weight: 700;
+  background: #f7f7f8;
+}
+.po-paper-sum {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 0 6px;
+  padding: 10px 12px;
+  border: 2px solid #111;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.po-paper-sum b {
+  font-size: 18px;
+}
+.po-paper-notes {
+  margin-top: 12px;
+  font-size: 12.5px;
+  display: grid;
+  gap: 4px;
+}
+.po-sign {
+  margin-top: 30px;
+  text-align: right;
+  font-size: 13.5px;
+  line-height: 2;
+}
+
+/* ---------- 거래처 카드 ---------- */
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+.vendor-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  color: inherit;
+  height: 100%;
+}
+a.vendor-card:hover {
+  text-decoration: none;
+}
+.vendor-card .head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.vendor-card .name {
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.vendor-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.vendor-meta .row {
+  gap: 7px;
+}
+.vendor-meta .icon {
+  color: var(--text-3);
+  flex: none;
+}
+.vendor-nums {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.vendor-nums > div {
+  padding: 8px 10px;
+  text-align: center;
+  background: var(--surface-2);
+}
+.vendor-nums > div + div {
+  border-left: 1px solid var(--border);
+}
+.vendor-nums .n {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.vendor-nums .l {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.vendor-pos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+}
+.vendor-pos .row {
+  gap: 6px;
+}
+.vendor-memo {
+  font-size: 12.5px;
+  color: var(--text-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .po-paper-parties {
+    grid-template-columns: 1fr;
+  }
+  .inv-toolbar .input-group {
+    width: 100%;
+  }
+}
+@media print {
+  .po-paper-parties {
+    grid-template-columns: 1fr 1fr;
+  }
+  .po-print-bar {
+    display: none !important;
+  }
+}
+.vendor-nums .n.accent {
+  color: var(--accent-text);
+}
+/* 바깥 테두리가 이미 초점 표시를 하므로 안쪽 입력칸의 초점 테두리는 숨김 (이중 테두리 방지) */
+.qty-stepper input:focus,
+.qty-stepper input:focus-visible {
+  box-shadow: none;
+  border-radius: 0;
+}
+.qty-stepper .unit {
+  padding-left: 4px;
+}

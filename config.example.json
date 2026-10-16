@@ -1,0 +1,7 @@
+{
+  "port": 3800,
+  "host": "0.0.0.0",
+  "allowExternal": false,
+  "openBrowser": true,
+  "allowedHosts": []
+}

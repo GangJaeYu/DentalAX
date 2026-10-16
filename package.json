@@ -1,0 +1,27 @@
+{
+  "name": "dentalax",
+  "version": "1.0.0",
+  "description": "치과 원내 업무 AX 웹 서비스 (원내 PC 한 대로 운영)",
+  "private": true,
+  "type": "commonjs",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test --test-concurrency=1 \"tests/*.test.js\"",
+    "test:e2e": "node --disable-warning=ExperimentalWarning tests/e2e/run.js",
+    "screenshots": "node --disable-warning=ExperimentalWarning tests/e2e/screenshots.js",
+    "audit": "npm audit --omit=dev",
+    "walkthrough": "node --disable-warning=ExperimentalWarning tests/e2e/walkthrough.js",
+    "walkthrough:video": "node --disable-warning=ExperimentalWarning tests/e2e/walkthrough.js --video"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1"
+  }
+}

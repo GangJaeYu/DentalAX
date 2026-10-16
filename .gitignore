@@ -1,0 +1,6 @@
+# 이 파일이 하는 일: git(버전 관리)에 올리지 않을 파일 목록
+node_modules/
+.npm-cache/
+data/
+config.json
+*.log
