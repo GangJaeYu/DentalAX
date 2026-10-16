@@ -113,4 +113,4 @@
 
 출처: [AWS Lightsail 가격](https://aws.amazon.com/lightsail/pricing/) (2026-10-16 확인), EC2 요금은 제3자 집계([aws-pricing.com](https://aws-pricing.com/t4g.small.html)), 국내 클라우드는 검색 결과 기준이라 확인 필요.
 
-**결론**: 원내 PC 한 대로 충분합니다. 클라우드는 원외 접속이 꼭 필요할 때만, 보안 전문가의 도움을 받아 검토하세요(README의 "외부 공개 시 주의" 참고).
+**결론**: 원내 PC 한 대로 충분합니다. 클라우드는 원외 접속이 꼭 필요할 때만, 보안 전문가의 도움을 받아 검토하세요([GUIDE.md의 "외부 공개 시 주의"](GUIDE.md#9-외부인터넷-공개-시-주의) 참고).

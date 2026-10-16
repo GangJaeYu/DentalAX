@@ -52,7 +52,7 @@ function main() {
     if (e.code === 'EADDRINUSE') {
       console.error(`\n[오류] ${config.port}번 포트를 이미 다른 프로그램이 쓰고 있습니다.`);
       console.error('  - DentalAX가 이미 켜져 있는지 확인하세요 (다른 검은 창).');
-      console.error('  - 또는 config.json 의 "port" 값을 바꾸세요. (README의 문제 해결 참고)\n');
+      console.error('  - 또는 config.json 의 "port" 값을 바꾸세요. (docs/GUIDE.md 의 문제 해결 참고)\n');
     } else {
       console.error('[오류] 서버를 시작하지 못했습니다:', e.message);
     }

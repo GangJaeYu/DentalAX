@@ -361,4 +361,4 @@
 ---
 
 이 안내서와 영상은 `npm run walkthrough` / `npm run walkthrough:video` 로 언제든 다시 만들 수 있습니다 (`tests/e2e/walkthrough.js`).
-설치·문제 해결은 [README](../../README.md)를 보세요.
+설치·문제 해결은 [설치·사용 안내서(GUIDE)](../GUIDE.md)를, 처음 화면은 [README](../../README.md)를 보세요.

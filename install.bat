@@ -11,7 +11,7 @@ echo.
 
 where node >nul 2>nul
 if errorlevel 1 (
-  echo [1/3] Node.js가 없습니다. README.md 의 "1단계: Node.js 설치"를 먼저 해 주세요.
+  echo [1/3] Node.js가 없습니다. docs\GUIDE.md 의 "1단계: Node.js 설치"를 먼저 해 주세요.
   start "" "https://nodejs.org/ko/download"
   pause
   exit /b 1
@@ -38,7 +38,7 @@ echo.
 echo [3/3] 동작 확인 중...
 node --disable-warning=ExperimentalWarning -e "require('node:sqlite'); require('express'); console.log('      확인 완료')"
 if errorlevel 1 (
-  echo       확인에 실패했습니다. README.md 의 "문제 해결"을 참고하세요.
+  echo       확인에 실패했습니다. docs\GUIDE.md 의 "문제 해결"을 참고하세요.
   pause
   exit /b 1
 )

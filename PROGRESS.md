@@ -13,6 +13,10 @@
 - 다시 만들기: `npm run walkthrough`(캡처·안내서), `npm run walkthrough:video`(영상, Playwright ffmpeg 필요)
 - 캡처·영상에는 이 PC의 폴더 경로·원내 IP가 찍히지 않도록 화면 글자를 일반 값으로 바꿔 표시(tests/e2e/lib.js MASK_PRIVATE). 병원·직원·업체는 모두 가상
 
+## 문서 구조 정리 (GitHub 공개용)
+- README.md 는 짧게: 프로젝트 소개(단일 프롬프트·약 1시간 45분·개입 0회), 기능 요약, 빠른 시작, 문서 목록
+- 자세한 내용은 링크 문서로 분리: docs/GUIDE.md(설치·사용), docs/DEVELOPMENT.md(폴더 지도·수정 요령·개발 명령), docs/BUILD_STORY.md(만든 과정·시간표), docs/prompts/(처음 아이디어·확장 프롬프트)
+
 ## 이어서 작업할 때
 1. `docs/CONVENTIONS.md` 를 먼저 읽기 (모듈 구조, 공통 부품, AI 기능 정의 방법, 테스트 방법)
 2. 고친 뒤: `npm test` → `npm run test:e2e` → 필요하면 `npm run screenshots` 로 화면 확인

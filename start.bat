@@ -11,7 +11,7 @@ where node >nul 2>nul
 if errorlevel 1 (
   echo.
   echo [안내] Node.js가 설치되어 있지 않습니다.
-  echo        README.md 의 "1단계: Node.js 설치"를 따라 설치한 뒤 다시 실행해 주세요.
+  echo        docs\GUIDE.md 의 "1단계: Node.js 설치"를 따라 설치한 뒤 다시 실행해 주세요.
   echo        잠시 후 Node.js 다운로드 페이지를 엽니다.
   echo.
   start "" "https://nodejs.org/ko/download"
@@ -37,7 +37,7 @@ if not exist "node_modules\express\package.json" (
   if errorlevel 1 (
     echo.
     echo [오류] 부품 설치에 실패했습니다. 인터넷 연결을 확인하고 다시 실행해 주세요.
-    echo        계속 실패하면 README.md 의 "문제 해결"을 참고하세요.
+    echo        계속 실패하면 docs\GUIDE.md 의 "문제 해결"을 참고하세요.
     pause
     exit /b 1
   )
