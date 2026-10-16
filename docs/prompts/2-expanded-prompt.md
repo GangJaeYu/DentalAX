@@ -1,6 +1,6 @@
 # ② 확장 프롬프트 (실제로 입력한 단 하나의 프롬프트)
 
-> [① 처음 아이디어](1-seed-prompt.md)를 구체화한 프롬프트입니다. **새 Claude Code 세션(Opus 5.5, effort high)에 이 내용 그대로 한 번 입력**했고,
+> [① 원 프롬프트](1-seed-prompt.md)를 AI에게 다듬어 달라고 요청해 구체화한 프롬프트입니다. **새 Claude Code 세션(Opus 5.5, effort high)에 이 내용 그대로 한 번 입력**했고,
 > 이후 사람의 결정·개입 없이 약 1시간 45분 만에 서비스가 완성되었습니다. 자세한 과정: [BUILD_STORY.md](../BUILD_STORY.md)
 >
 > 직접 따라 해 보려면: 빈 폴더에서 Claude Code를 열고 아래 상자 안의 글을 통째로 붙여 넣으세요.
